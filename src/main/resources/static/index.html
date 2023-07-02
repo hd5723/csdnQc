@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询博客质量</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import axios -->
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+</head>
+<body>
+
+<div id="app">
+    <h1>查询博客质量</h1>
+    <el-row class="mb-4">
+        <el-input
+                placeholder="请输入CSDN博客ID"
+                v-model="csdnId"
+                clearable>
+        </el-input>
+        <el-button type="primary" @click="qc">查询</el-button>
+    </el-row>
+
+    <br>
+    <el-table  :data="blogDataList"  style="width: 100%" v-loading="loading">
+        <el-table-column   prop="post_time"  label="发表日期"  width="180"> </el-table-column>
+        <el-table-column   prop="score"  label="分数"  width="80"> </el-table-column>
+        <el-table-column   prop="message" label="质量分描述" width="150"> </el-table-column>
+        <el-table-column   prop="blog_url" label="文章地址" > </el-table-column>
+    </el-table>
+</div>
+
+<script>
+    const App = {
+        data(){
+            return{
+                blogDataList: [],
+                csdnId: "",
+                loading: false
+            }
+        },mounted(){
+            // this.invokeCsdnDataList();
+        },
+        methods:{
+            invokeCsdnDataList(){
+                //axios调用后台get方法
+                axios.get("http://localhost/csdn/qc/name/" + this.csdnId)
+                    .then(response =>{
+                        //对返回结果进行处理
+                        var data = response.data;
+                        if( data.code == 200 ) {
+                            this.blogDataList = data.data;
+                            this.loading = false;
+                        }
+                        console.log(this.blogDataList);
+                    }).catch(function(error){
+                    //异常处理
+                    console.log(error);
+                })
+            } ,
+            qc() {
+                this.loading = true;
+                this.invokeCsdnDataList();
+            }
+        }
+
+    }
+
+    const App2 = Vue.createApp(App)
+    App2.use(ElementPlus)
+    App2.mount(app)
+</script>
+</body>
+</html>
