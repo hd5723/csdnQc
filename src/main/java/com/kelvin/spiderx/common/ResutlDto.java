@@ -5,7 +5,7 @@ import lombok.Data;
 
 /***
  * @title ResutlDto
- * @desctption <TODO description class purpose>
+ * @desctption 返回对象
  * @author LTF
  * @create 2023/7/1 15:17
  **/
