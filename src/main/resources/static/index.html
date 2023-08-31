@@ -50,7 +50,7 @@
         methods:{
             invokeCsdnDataList(){
                 //axios调用后台get方法
-                axios.get("http://localhost:81/csdn/qc/name?username=" + this.csdnId + "&currentPage=" + this.currentPage )
+                axios.get("http://localhost/csdn/qc/name?username=" + this.csdnId + "&currentPage=" + this.currentPage )
                     .then(response =>{
                         //对返回结果进行处理
                         var data = response.data;
