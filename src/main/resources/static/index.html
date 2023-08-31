@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>查询博客质量</title>
     <!-- Import style -->
-    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.3/index.css" rel="stylesheet">
     <!-- Import Vue 3 -->
-    <script src="//unpkg.com/vue@3"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script>
     <!-- Import axios -->
-    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- Import component library -->
-    <script src="//unpkg.com/element-plus"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <!-- 引入element plus -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.3/index.full.min.js"></script>
 </head>
 <body>
 
@@ -23,6 +23,7 @@
                 clearable>
         </el-input>
         <el-button type="primary" @click="qc">查询</el-button>
+        &nbsp;&nbsp;&nbsp;页码：<el-input v-model="currentPage" style="width:200px;" clearable ></el-input>
     </el-row>
 
     <br>
@@ -40,7 +41,8 @@
             return{
                 blogDataList: [],
                 csdnId: "",
-                loading: false
+                loading: false,
+                currentPage: 1
             }
         },mounted(){
             // this.invokeCsdnDataList();
@@ -48,7 +50,7 @@
         methods:{
             invokeCsdnDataList(){
                 //axios调用后台get方法
-                axios.get("http://localhost/csdn/qc/name/" + this.csdnId)
+                axios.get("http://localhost:81/csdn/qc/name?username=" + this.csdnId + "&currentPage=" + this.currentPage )
                     .then(response =>{
                         //对返回结果进行处理
                         var data = response.data;

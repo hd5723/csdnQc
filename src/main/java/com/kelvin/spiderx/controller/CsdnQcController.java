@@ -20,10 +20,14 @@ public class CsdnQcController {
     @Resource
     private CsdnQcRestService csdnQcService;
 
-    @GetMapping("/qc/name/{username}")
+    @GetMapping("/qc/name")
     // 执行查询操作
-    public ResutlDto qcbyname(@PathVariable(name = "username") String username) {
-        return ResutlTools.buildSuccess(csdnQcService.allBlogQcDataByRest(username));
+    public ResutlDto qcbyname(@RequestParam String username ,
+                              @RequestParam Integer currentPage) {
+        if( currentPage == null ) {
+            currentPage = 1;
+        }
+        return ResutlTools.buildSuccess(csdnQcService.allBlogQcDataByRest(username , currentPage));
     }
 
 }

@@ -68,15 +68,15 @@ public class CsdnQcRestService {
     /**
      *  查询指定博主的文章质量分
      */
-    public List<BlogInfoDetail> allBlogQcDataByRest( String userName ) {
-        List<BlogInfoDetail> list =  Common.csdnblogdataCache.get(userName);
+    public List<BlogInfoDetail> allBlogQcDataByRest( String userName ,Integer currentPage) {
+        List<BlogInfoDetail> list =  Common.csdnblogdataCache.get(userName+":"+currentPage);
         if(!CollectionUtils.isEmpty(list)) {
-            return Common.csdnblogdataCache.get(userName);
+            return Common.csdnblogdataCache.get(userName+":"+currentPage);
         }
 
         RestTemplate restTemplate = new RestTemplate();
-        int page = 1;
-        int total = 0;
+        int page = currentPage;
+        int total = 100;
 
         //首先查询所有的文章
         String url = "https://blog.csdn.net/community/home-api/v1/get-business-list?page="+ page +"&size="+ total +"&businessType=blog&orderby=&noMore=false&year=&month=&username="+userName;
@@ -113,7 +113,7 @@ public class CsdnQcRestService {
 
         log.info("读取数据完毕！the end!");
         if( !CollectionUtils.isEmpty(csdnBlogInfoList) ) {
-            Common.csdnblogdataCache.put(userName , csdnBlogInfoList);
+            Common.csdnblogdataCache.put(userName+":"+currentPage , csdnBlogInfoList);
         }
         return csdnBlogInfoList;
     }
@@ -121,7 +121,7 @@ public class CsdnQcRestService {
     public static void main(String[] args) {
         String username = "s445320";
         CsdnQcRestService csdnQcService = new CsdnQcRestService();
-        csdnQcService.allBlogQcDataByRest(username);
+        csdnQcService.allBlogQcDataByRest(username , 1);
     }
 
 
