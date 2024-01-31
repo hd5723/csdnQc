@@ -122,7 +122,6 @@ public class CsdnQcRestService {
             }
 
         }
-        log.info("csdnBlogInfoList size: {}" , csdnBlogInfoList.size());
 
         log.info("读取数据完毕！the end!");
         if( !CollectionUtils.isEmpty(csdnBlogInfoList) ) {
