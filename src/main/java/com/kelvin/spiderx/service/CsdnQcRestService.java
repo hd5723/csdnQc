@@ -4,9 +4,13 @@ import com.google.gson.Gson;
 import com.kelvin.spiderx.common.Common;
 import com.kelvin.spiderx.entity.BlogInfoBody;
 import com.kelvin.spiderx.entity.BlogInfoDetail;
+import javax.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -82,9 +86,18 @@ public class CsdnQcRestService {
         String url = "https://blog.csdn.net/community/home-api/v1/get-business-list?page="+ page +"&size="+ total +"&businessType=blog&orderby=&noMore=false&year=&month=&username="+userName;
 
         List<BlogInfoDetail> csdnBlogInfoList = null;
-        HashMap jsonObject =  restTemplate.getForObject(url, HashMap.class);
-        if( jsonObject.get("code").equals(200) ) {
-            LinkedHashMap blogInfoMap = (LinkedHashMap) jsonObject.get("data");
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set("Referer", "https://blog.csdn.net/s445320?spm=1001.2101.3001.5343");
+        headers.set("Host", "blog.csdn.net");
+        headers.set("accept","application/json, text/plain, */*");
+        headers.set("Cookie", "yd_captcha_token=ycvv5UFJoS85Sqq9lldidqDJUqsGkOHfPgQYwnZmFTW21F0AbUPSxlSEwiW6P3VQRo3rL1Db9X+yfUOpv8Jvaw%3D%3D;  waf_captcha_marker=6a3309ad73d63a8b1475a9f78407c5e25fc792a60158d398d12f25b7dc261584; ");
+        HttpEntity requestEntity = new HttpEntity(null, headers);
+
+        ResponseEntity rssResponse = restTemplate.exchange(url, HttpMethod.GET, requestEntity, HashMap.class);
+        if( rssResponse.getStatusCode().equals(HttpStatus.OK) ) {
+            HashMap body = (HashMap) rssResponse.getBody();
+            LinkedHashMap blogInfoMap = (LinkedHashMap) body.get("data");
             total = (int) blogInfoMap.get("total");
             List<LinkedHashMap> blogInfoDetails = (List<LinkedHashMap>) blogInfoMap.get("list");
             System.out.println( blogInfoDetails.size() );
