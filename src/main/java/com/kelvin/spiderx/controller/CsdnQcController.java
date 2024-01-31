@@ -1,5 +1,6 @@
 package com.kelvin.spiderx.controller;
 
+import com.kelvin.spiderx.common.Common;
 import com.kelvin.spiderx.common.ResutlDto;
 import com.kelvin.spiderx.common.ResutlTools;
 import com.kelvin.spiderx.service.CsdnQcRestService;
@@ -28,6 +29,14 @@ public class CsdnQcController {
             currentPage = 1;
         }
         return ResutlTools.buildSuccess(csdnQcService.allBlogQcDataByRest(username , currentPage));
+    }
+
+    @GetMapping("/qc/clearCache")
+    public ResutlDto clearCache(@RequestParam String username) {
+        for (int i = 0; i < 10; i++) {
+            Common.csdnblogdataCache.remove(username+":" + i);
+        }
+        return ResutlTools.buildSuccess(true);
     }
 
 }
